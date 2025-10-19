@@ -11,8 +11,9 @@ The repository is organized into three main components:
 Each lecture includes a set of Exam Assignments (questions and programming tasks) related to the week’s topic.
 All solutions are located in the `answers` directory, organized by lecture.
 Each lecture folder typically includes:
-	•	`report.md` — written answers and explanations
-	•	`code/` — directory with corresponding source code files
+
+* `report.md` — written answers and explanations
+* `code/` — directory with corresponding source code files
 
 ### 2. C++ Project
 
