@@ -2,7 +2,7 @@
 
 Some remarks:
 - Whenever I use an LLM or Code Agent, I will specify so
-- To keep the size small, I will not include binary executables. However, (whenever it seems necessary,) I will include the commands which I used to compile
+- To keep the repository size small, I will not include binary executables. However, (whenever it seems necessary,) I will include the commands which I used to compile
 
 ## Task 1
 
@@ -26,6 +26,10 @@ Main source: https://www.openmp.org/wp-content/uploads/ntu-vanderpas.pdf
 
 Link: http://csapp.cs.cmu.edu/2e/ch1-preview.pdf
 
+What I found most interesting, was that files are used as an abstraction of I/O devices. I had previously heard that on Windows systems, there are reserved file names that may not be chosen by the user when creating files, because the operating system uses them to interact with devices. These include for example `CON` for writing text to the console and `PRN` for sending text to a printer device. When I heard about this, I thought it was just an odd quirk that was [specific to DOS/Windows](https://en.wikipedia.org/wiki/DOS#File_system). Surprisingly, as the book mentions, modeling all devices as files is a fundamental abstraction to Unix and Unix-like operating systems. This inspired me to research more about this topic, as the book does not really go into detail. During this research, I found a comprehensive list of 'device files' for Linux [here](https://tldp.org/LDP/Linux-Filesystem-Hierarchy/html/dev.html) and also found out that [MS-DOS actually borrowed the concept of using files as an abstraction for I/O devices from Unix](https://en.wikipedia.org/wiki/Device_file). Personally, I think this is a very elegant way of interacting with devices. It allows programmers to use the same `read()` and `write()` system calls for all I/O operations, regardless of the underlying hardware. This abstraction means programmers don't need to worry about the specifics of each device, because at a high level, it appears just like a regular file. However, under the hood, the device drivers handle the hardware details. Very cool!
+
+The second excerpt that I found interesting was the `Aside: The Linux project` section. It shows an e-mail written by Linux Torvalds, talking about his hobby-project `minix`. With this, Torvalds laid out the foundation for the Linux operating system. I find it remarkable, that a single university student can take on such a project all by himself. In today's age, there are tons of tutorials and video material on how to code simple operating systems. Torvalds e-mail however dates back to 1991, the same year the [World Wide Web was just published](https://en.wikipedia.org/wiki/World_Wide_Web). All his knowledge must have come from his classes or books that he read in his free time.
+
 ## Task 3 (optional)
 
 **Do the coding warmup on slide 19**
@@ -44,7 +48,7 @@ Slide 14 OpenMP:
 
 ```
 > g++-15 -fopenmp hello_simple.cpp -o hello_simple
-> OMP_NUM_THREADS=4 ./hello_simple                
+> OMP_NUM_THREADS=4 ./hello_simple          
 Hello World!Hello World!
 
 Hello World!
@@ -55,7 +59,7 @@ Slide 14 Generated:
 
 ```
 > g++-15 generated.cpp -o generated
-> ./generated   
+> ./generated
 Hello World!
 Hello World!Hello World!
 
@@ -94,12 +98,12 @@ Solution: See `code/pi_monte_carlo.cpp`
 
 Execution:
 ```
-> g++-15 -fopenmp pi_monte_carlo.cpp -o pi_monte_carlo.o
-> OMP_NUM_THREADS=1 ./pi_monte_carlo.o                 
+> g++-15 -fopenmp pi_monte_carlo.cpp -o pi_monte_carlo
+> OMP_NUM_THREADS=1 ./pi_monte_carlo
 pi: 3.14176
 run_time: 6.65308 s
 n: 100000000
-> OMP_NUM_THREADS=11 ./pi_monte_carlo.o                 
+> OMP_NUM_THREADS=11 ./pi_monte_carlo          
 pi: 3.14185
 run_time: 1.03814 s
 n: 100000000
