@@ -10,6 +10,24 @@
 
 **Read the paper There’s plenty of room at the Top: What will drive computer performance after Moore’s law? Explain in detail the figure Performance gains after Moore’s law ends.**
 
+The lower part of the figure is labeled "The Bottom" and represents the foundation, on which computer performance gains in the last 50 years have built on. According to Moore's law, the number of transistors on a computer chip doubles every two years. This meant that simply relying on improvements in semiconductor technology yielded predictable, broad-based gains in computer performance. However, it is becoming increasingly hard to keep Moore's law up. In order to double the number of transistors, each individual transistor needs to shrink in size. Lately, the process of transistor miniaturization has started to stall. On one hand, we have reached the limits of physics since the physics of materials changes at atomic levels. On the other hand, we have also reached the limits of what is economically feasible to manufacture.
+
+The upper two-thirds of the figure show other opportunities for computer performance gains. Now that it has become harder to squeeze out performance at "The Bottom", the three mentioned technologies could be used to further increase performance:
+
+**Software**
+
+Software can be made more efficient by performance engineering. This practice aims to reduce inefficiencies in programs (bloat) and also looks as customization of software to the underlying hardware. Certain hardware might be equipped with accelerators such as matrix or vector units, which could speed up calculations of a program if used correctly.
+
+**Algorithms**
+
+Engineering more-efficient algorithms can also yield performance gains, however rather unevenly and ultimately with diminishing returns. An originally naive algorithm might be improved by a lot if a new and more efficient approach is found, but once the algorithm is reaching the minimally required theoretical complexity of the problem, performance gains will stall as well. The biggest benefits can be seen when looking from a different direction: engineering algorithms for new problem domains (e.g., machine learning) and from developing new theoretical machine models that better reflect emerging hardware.
+
+**Hardware**
+
+The third technology in the figure is hardware architecture. Here, the process of hardware streamlining is used to increase computer performance. An example would be processor simplification, where complex processing cores are simplified in order to shrink their footprint. This in return allows placing more cores on the same chip. Another example is domain specialization, where hardware is customized for a particular application domain. Lately, this is heavily used in machine learning applications, where floating-point precision is decreased from the 32 bits to 16, 8 or even 4 bits.
+
+In conclusion, the figure shows three opportunities to keep up the gains in computer performance (The Top) in the post-Moore era, where steady performance gains are no longer guaranteed by advancements in semiconductor technology (The Bottom).
+
 ## Task 3 (optional)
 
 **Do the coding warmup on slide 20.** 
