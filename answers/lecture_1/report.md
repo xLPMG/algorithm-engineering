@@ -68,7 +68,7 @@ Hello World!
 
 ### 2. Create a parallel version of the π program (slide 16)
 
-Since we already implemented this during class, I decided to take `code/pi_openmp_v1.cpp` and try to improve it. For this, I also used the help of an LLM (Github Copilot). The resulting code uses the `for reduction` directive and the code can be seen in `code/pi_openmp_v2.cpp`.
+Since we already implemented this during class, I decided to take `code/pi_openmp_v1.cpp` and tried to improve it. For this, I also used the help of an LLM (Github Copilot). The resulting code uses the `for reduction` directive and the code can be seen in `code/pi_openmp_v2.cpp`.
 
 ### 3. Watch the times your implementation needs with different numbers of threads
 
