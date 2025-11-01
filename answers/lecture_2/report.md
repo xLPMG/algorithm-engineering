@@ -65,6 +65,10 @@ The code is now a little over 2.1 times faster!
 
 ### 3. What schedule on slide 18 produces the following (bad) pattern?
 
+`schedule(static, 22)`
+
+The first thread that receives 'work' will compute the first 22 iterations (0-21) and the second thread to receive 'work' will take the rest (22-31).
+
 ## Task 4
 
 **Rewrite the program for estimating π from the last lecture (pi_numerical_integration.cpp) so that it is parallelized with the #pragma omp for construct.**
