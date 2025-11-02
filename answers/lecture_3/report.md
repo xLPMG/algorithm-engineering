@@ -80,3 +80,26 @@ The original code has a run time of roughly 1.26 seconds. Switching to the `redu
 A much more significant improvement was achieved through the new random number generator. In my test, it shaved off almost 1.1 seconds of the original run time. That is a speedup of ~$7.68x$!
 
 Adding the reduction clause to the code with the improved RNG function reduced the run time by another 0.002 seconds.
+
+## Task 2 (optional)
+
+**Do the coding warmup on slide 20**
+
+### 1. Parallelize the serial π program (pi_numerical_integration.cpp) from the first lecture by adding only one extra line of code
+
+Solution:
+- See `code/pi_numerical_integration_parallelized.cpp`
+- I added the line `#pragma omp parallel for reduction(+:sum)`
+
+Execution:
+
+```
+> g++-15 -Ofast -std=c++11 -march=native -fopenmp pi_numerical_integration_original.cpp -o pi_numerical_integration_original
+> g++-15 -Ofast -std=c++11 -march=native -fopenmp pi_numerical_integration_parallelized.cpp -o pi_numerical_integration_parallelized
+> OMP_NUM_THREADS=8 ./pi_numerical_integration_original                                                                             
+pi with 1000000000 steps is 3.1415926535900072 in 0.330346 seconds
+> OMP_NUM_THREADS=8 ./pi_numerical_integration_parallelized                                         
+pi with 1000000000 steps is 3.1415926535898078 in 0.07066 seconds
+```
+-> ~$4.68x$ speedup
+-> through multiple runs, the parallelized code delivered consistent and approximately correct results, so lost updates do not seem to occur here ( = correct code :D )
