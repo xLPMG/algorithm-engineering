@@ -22,7 +22,9 @@
 
 ### 2. Create a graph where the x-axis represents the number of threads and the y-axis displays the relative speedup over std::sort.
 
-Solution: See `code/min_max_quicksort_threads.cpp`
+![Graph: Speedup vs Thread Count](./speedup_vs_threads.png)
+
+Solution: See `code/min_max_quicksort_threads.cpp` and `code/graphs.py`
 
 Execution:
 
@@ -98,6 +100,14 @@ Benchmarking with 11 threads:
 ```
 
 ### 3. Construct another graph with the x-axis denoting the array size and the y-axis illustrating the relative speedup over std::sort.
+
+![Graph: Speedup vs Array Size](./speedup_vs_array_size.png)
+
+Note: The maximum array size I tested was 10^9, because the next step-up (10^10) would have exceeded my memory in size.
+
+Solution: See `code/min_max_quicksort_array_sizes.cpp` and `code/graphs.py`
+
+Execution:
 
 ```
 > g++-15 -fopenmp -march=native -Ofast min_max_quicksort_array_sizes.cpp -o min_max_quicksort_array_sizes
