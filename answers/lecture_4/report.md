@@ -146,6 +146,30 @@ Benchmarking with array size 1e+09:
 
 ### 4. Explain any patterns or trends observed in the graphs, and offer potential reasons for these findings.
 
+**Thread Count vs Speedup**
+
+When looking at the graph that plots different thread counts against the speedups achieved over `std::sort`, a few patterns can be observed.
+
+With 1 thread, both `__gnu_parallel::sort` and `min_max_quicksort` have a speedup of less than 1x, meaning that they are actually slower than `std::sort`. This could indicate the performance overhead of using a parallelization framework. Additionally, it seems that `min_max_quicksort` is not as optimized as `std::sort` and `__gnu_parallel::sort`.
+
+With an increasing number of threads, the speedup increases as well. Both algorithms outperform `std::sort` as soon as more than one thread is used. However, for `min_max_quicksort`, the achieved speedup does not scale linearly with the number of threads. Instead, it follows a logarithmic curve, meaning that diminishing returns are receiving early on.
+
+As for `__gnu_parallel::sort`, it roughly maintains linear scaling up until 4 threads. For any thread count higher than that, diminishing returns can be observed as well, although the speedup constantly stays above `min_max_quicksort`. 
+
+The observations can likely be explained by the number of performance and efficiency cores, where the version running on up to 4 threads is primarily using performance cores and the versions with a higher thread count also utilize less performant efficiency cores, thus not reaching linear increases in speedup. Additionally, it seems like `min_max_quicksort` has worse load balancing or parellization capabilities than `__gnu_parallel::sort`, because they have similar performance when run sequentially but increasingly different performance with higher thread counts.
+
+**Array Size vs Speedup**
+
+When looking at the graph that plots different array sizes against the speedups achieved over `std::sort`, we can observe interesting patterns as well.
+
+Both parallel algorithms peak around 10^7-10^8 elements, where `min_max_quicksort` achieves 4.5x speedup and `__gnu_parallel::sort` reaches nearly 7x speedup. At 10^5 elements, speedups are the lowest (3.3x and 3.6x respectively) due to parallelization overhead dominating the computation time. At 10^9 elements, the performance drops significantly. This is likely due to cache misses and memory bandwidth saturation. I did not try any array sizes larger than that, since the benchmark was already using around 75% of the system memory at peak.
+
+We can also observe that `__gnu_parallel::sort` continuously outperforms `min_max_quicksort` here as well. While it is hard to find an exact reason without researching the implementation details, we can assume that `__gnu_parallel::sort` uses better memory management techniques and optimizations that allow it to better handle larger data sizes.
+
 ## Task 2
 
 **Read** _What every systems programmer should know about concurrency._ **Discuss two things you find particularly interesting.**
+
+The first topic I found particularly interesting was the distinction between strongly ordered and weakly ordered systems. The article explains that different architectures provide different ordering guarantees, also known as memory models. There are strongly ordered systems, such as x64 architectures, which generally ensure that memory operations are completed in a sequential order. Then there are weakly ordered systems, such as ARM architectures, which do not make this guarantee. This means that on weakly ordered systems, memory operations can be automatically reordered for optimization purposes, which can lead to unexpected behavior in concurrent programs if not handled properly. The article then shows an example of how to use memory barriers to enforce ordering on ARM architectures: one example is the `atomic` keyword in C++, which gets compiled into `dmb` instructions on ARM. These act as memory barriers and any memory operation that happens before the barrier in program order is guaranteed to be completed before any memory operation that happens after the barrier. For atomic functions, this means that the respective memory access is sandwiched between two `dmb` instructions.
+
+The second topic I found interesting was the explanation of the `volatile` keyword in C++. I had heard of it before, and it was briefly mentioned in a previous lecture, but I had never fully understood its purpose. The article explains that `volatile` is used to inform the compiler that a variable's value can be changed by something besides the program that is being executed. When using the `volatile` keyword, the compiler will guarantee two things: first, it will not eliminate any loads and stores that seem "unnecessary". For example, if a variable is assigned a value multiple times in a row without any reads in between, the compiler will not optimize away the redundant assignments. This is because the variable might point to an `MMIO` register, where it would not be safe to assume that the write operations are redundant. Second, the compiler will not reorder any `volatile` operations with respect to other `volatile` operations. This means that if there are multiple `volatile` reads and writes in a program, the compiler will ensure that they are executed in the order they appear in the source code. However, it is important to note that `volatile` does not provide any guarantees about reordering with respect to non-volatile operations, nor does it emit any memory barriers. As a result, it can not be used for safe inter-thread communication.
