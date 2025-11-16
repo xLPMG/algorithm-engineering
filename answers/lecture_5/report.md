@@ -64,3 +64,75 @@ Full execution log:
 > build % ./quantpng ../pluto.png 
 Written quantized_example.png
 ```
+
+## Task 2
+
+**Create a static library that computes fizzbuzz. Test this static library using Catch2.**
+
+Solution: See `code/test_fizzbuzz`
+
+CMake commands:
+
+```
+cmake -DCMAKE_CXX_COMPILER=g++-15 -DCMAKE_BUILD_TYPE=Release ..
+cmake --build . --parallel 11
+```
+
+Full execution log:
+
+```
+> test_fizzbuzz % mkdir build
+> test_fizzbuzz % cd build 
+> build % cmake -DCMAKE_CXX_COMPILER=g++-15 -DCMAKE_BUILD_TYPE=Release ..
+CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- The CXX compiler identification is GNU 15.2.0
+-- Checking whether CXX compiler has -isysroot
+-- Checking whether CXX compiler has -isysroot - yes
+-- Checking whether CXX compiler supports OSX deployment target flag
+-- Checking whether CXX compiler supports OSX deployment target flag - yes
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /opt/homebrew/bin/g++-15 - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+CMake Deprecation Warning at fizzbuzz/CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+CMake Deprecation Warning at catch/CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Configuring done (0.6s)
+-- Generating done (0.0s)
+-- Build files have been written to: /algorithm-engineering/answers/lecture_5/code/test_fizzbuzz/build
+> build % cmake --build . --parallel 11
+[ 20%] Building CXX object fizzbuzz/CMakeFiles/fizzbuzz.dir/src/fizzbuzz.cpp.o
+[ 40%] Linking CXX static library libfizzbuzz.a
+[ 40%] Built target fizzbuzz
+[ 80%] Building CXX object CMakeFiles/fizzbuzz_tests.dir/catch_tests_fizzbuzz.cpp.o
+[ 80%] Building CXX object CMakeFiles/fizzbuzz_tests.dir/catch_main.cpp.o
+[100%] Linking CXX executable fizzbuzz_tests
+[100%] Built target fizzbuzz_tests
+> build % ./fizzbuzz_tests 
+===============================================================================
+All tests passed (68 assertions in 3 test cases)
+```
