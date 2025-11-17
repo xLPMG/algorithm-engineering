@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
+project(quantpng LANGUAGES CXX C)
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+
+add_subdirectory(lodepng)
+add_subdirectory(quantize)
+
+add_executable(quantpng main.cpp)
+
+target_link_libraries(quantpng PUBLIC lodepng quantize)
