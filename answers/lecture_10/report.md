@@ -39,7 +39,7 @@ performance. If we had used a profiler from the beginning, we would have identif
 
 **Select one slide from the lecture, research more about the topic, and report on it. (except pages 15–16)**
 
-All of the tools which were mentioned in the lecture were very interesting, however they are all constrained to either Intel processors or Linux operating systems. Personally, I am using a Macbook with an Apple Silicon (M3 Pro) processor, so I was interested in finding similar tools for my platform. This will be especially useful for the project I am currently working on for this class.
+All the tools which were mentioned in the lecture were very interesting, however they are all constrained to either Intel processors or Linux operating systems. Personally, I am using a Macbook with an Apple Silicon (M3 Pro) processor, so I was interested in finding similar tools for my platform. This will be especially useful for the project I am currently working on for this class.
 
 After some research, I found that `Instruments` is a powerful performance analysis and testing tool that comes bundled with Xcode on macOS. It provides a suite of tools for profiling and analyzing the performance of applications. With Instruments, developers can monitor various aspects of their applications, including CPU usage, memory allocation, disk activity, and network performance.
 
@@ -55,19 +55,19 @@ To start profiling, I clicked the red record button in the top left corner:
 
 ![Start Profiling](images/record.png)
 
-After the program finished executing, the profiler showed me the following results:
+After the program finished executing, the profiler showed the following results:
 
 ![Run 1](images/run-1.png)
 
-We can see that the program took 1.73 seconds to complete, where loading the image took 1.16 seconds (at 67,1%) and writing it back took 0.52 seconds (at 30%). This showed me that I should first investigate the loading process, because there might be the largest potential for optimization there. If we look closer, we can see that the most time is spent on the `strtol` calls (which are used to convert the ASCII pixel values to integers). The icon (macOS library symbol) next to the time indicates that this is a system function, which means that I cannot optimize it directly. However, I could try to replace it with a different and more performant function. I went back to my code and replaced the `strtol` calls with `std::from_chars`, which is a C++17 feature that provides a fast way to convert strings to numbers. Furthermore, I cleaned up the code a bit to improve readability. The result of the second run is as follows:
+We can see that the program took 1.73 seconds to complete, where loading the image took 1.16 seconds (at 67.1%) and writing it back took 0.52 seconds (at 30%). This showed me that I should first investigate the loading process, because there might be the largest potential for optimization there. If we look closer, we can see that the most time is spent on the `strtol` calls (which are used to convert the ASCII pixel values to integers). The icon (macOS library symbol) next to the time indicates that this is a system function, which means that I cannot optimize it directly. However, I could try to replace it with a different and more performant function. I went back to my code and replaced the `strtol` calls with `std::from_chars`, which is a C++17 feature that provides a fast way to convert strings to numbers. Furthermore, I cleaned up the code a bit to improve readability. The result of the second run is as follows:
 
 ![Run 2](images/run-2.png)
 
-The first and probably most important observation is that the total runtime has decreased from 1.73 seconds to just 987 milliseconds, which is a significant improvement. The optimization of the loading process is clearly visible, as it now only took 456 milliseconds (at 46.2%) instead of 1.16 seconds. The profiler now shows that the most time is spent on the `save_image` function at 497 milliseconds (at 50.4%). Here, the `memmove` function is the most time-consuming part, which is also a system function. Here, the optimization was not as straightforward as before, but to explain it shortly: I changed the implementation to a buffered write approach. I used an 1 Mib buffer where the pixel data is written to and as soon as the buffer is full, it is flushed to the file. This reduces the number of `memmove` calls significantly, which results in a faster write process. The final result after this optimization is as follows:
+The first and probably most important observation is that the total runtime decreased from 1.73 seconds to just 987 milliseconds, which is a significant improvement. The optimization of the loading process is clearly visible, as it now only takes 456 milliseconds (at 46.2%) instead of 1.16 seconds. The profiler now shows that the most time is spent on the `save_image` function at 497 milliseconds (at 50.4%). Inside `save_image`, the `memmove` function is the most time-consuming part, which is also a system function. Differently than the previous code improvements, this optimization was not as straightforward. Simply put, I changed the implementation to a buffered write approach. I used an 1 Mib buffer where the pixel data is written to and as soon as the buffer is full, it is flushed to the file. This greatly reduces the number of `memmove` calls, resulting in a faster write process. The final result after this optimization is as follows:
 
 ![Run 3](images/run-3.png)
 
-The total runtime has now decreased to just 868 milliseconds, which is a huge improvement compared to the original implementation. Saving the image only took 296 milliseconds (at 34.1%) and the loading process is the most time-consuming part again.
+The total runtime decreased to just 868 milliseconds, which is a huge improvement compared to the original implementation. Saving the image only took 296 milliseconds (at 34.1%) and the loading process is the most time-consuming part again.
 
 At this point, I had invested quite a bit of time into optimizing the code, so I decided to stop here. I was also very happy with the results and the profiler itself. Without its help, I would have never guessed that `strtol` and `memmove` were the bottlenecks in my code. 
 
