@@ -39,7 +39,7 @@ performance. If we had used a profiler from the beginning, we would have identif
 
 **Select one slide from the lecture, research more about the topic, and report on it. (except pages 15–16)**
 
-All of the tools which were mentioned in the lecture were very interesting, however they are all constrained to either Intel processors or Linux operating systems. Personally, I am using a Mac with an Apple Silicon (M1) processor, so I was interested in finding similar tools for my platform. This will be especially useful for the project I am currently working on for this class.
+All of the tools which were mentioned in the lecture were very interesting, however they are all constrained to either Intel processors or Linux operating systems. Personally, I am using a Macbook with an Apple Silicon (M3 Pro) processor, so I was interested in finding similar tools for my platform. This will be especially useful for the project I am currently working on for this class.
 
 After some research, I found that `Instruments` is a powerful performance analysis and testing tool that comes bundled with Xcode on macOS. It provides a suite of tools for profiling and analyzing the performance of applications. With Instruments, developers can monitor various aspects of their applications, including CPU usage, memory allocation, disk activity, and network performance.
 
