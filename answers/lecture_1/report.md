@@ -1,8 +1,6 @@
 # Report on Exam Assignments - Lecture 1
 
-Some remarks:
-- Whenever I use an LLM or Code Agent, I will specify so
-- To keep the repository size small, I will not include binary executables. However, (whenever it seems necessary,) I will include the commands which I used to compile
+Before starting with the tasks, I would like to mention that I will not include binary executables in this repository (to keep the size small and git cant track binaries well anyway). However, (whenever it seems necessary,) I will include the commands which I used to compile and the terminal output.
 
 ## Task 1
 
