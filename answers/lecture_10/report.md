@@ -53,6 +53,8 @@ In the Time Profiler, I selected "Next Recording" and then selected the compiled
 
 To start profiling, I clicked the red record button in the top left corner:
 
+![Start Profiling](images/record.png)
+
 After the program finished executing, the profiler showed me the following results:
 
 ![Run 1](images/run-1.png)
