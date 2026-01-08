@@ -24,7 +24,7 @@ This clause sets a limit for the vector length that the compiler may use. This i
 
 # Task 3
 
-**Read the article Intel MMX for Multimedia PCs. https://dl.acm.org/doi/pdf/10.1145/242857.242865 Discuss two things you find particularly interesting.**
+**Read the article** _Intel MMX for Multimedia PCs_. https://dl.acm.org/doi/pdf/10.1145/242857.242865 **Discuss two things you find particularly interesting.**
 
 The most interesting aspect of the Intel MMX technology to me is its backward compatibility. New processors with MMX technology had to maintain compatibility with existing software, including operating systems and applications without modification. Furthermore, the coexistence of existing applications and new applications using MMX technology had to be ensured. The main technique for maintaining full compatibility of MMX technology was hiding it inside the existing floating-point state and registers. The applications themselves then check for the presence of MMX technology and use it if available.
 

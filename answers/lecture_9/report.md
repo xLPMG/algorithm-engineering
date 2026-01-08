@@ -44,7 +44,7 @@ Lastly, I want to talk about a future trend: 3D Processing.
 
 ## Task 4
 
-**Read the paper An Overview of Cache Optimization Techniques and Cache-Aware Numerical Algorithms. Discuss two things you find particularly interesting.**
+**Read the paper** _An Overview of Cache Optimization Techniques and Cache-Aware Numerical Algorithms_**. Discuss two things you find particularly interesting.**
 
 The two things I found particularly interesting in this paper are **Loop Fusion** and **Data Prefetching**.
 
