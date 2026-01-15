@@ -32,7 +32,7 @@ void vadd(const float* a, const float* b, float* c, int n)
 
 Next, here is how the same function can be implemented in Metal Shading Language:
 
-```metal
+```c
 kernel void vadd(device const float* a, device const float* b, device float* c, uint index [[thread_position_in_grid]])
 {
     // the for-loop is replaced with a collection of threads, each of which calls this function.
@@ -40,11 +40,24 @@ kernel void vadd(device const float* a, device const float* b, device float* c, 
 }
 ```
 
-In the MSL example, the function adds the kernel keyword, which declares that the function is:
+Lastly, here is the OpenCL code again for direct comparison:
+
+```c
+__kernel void vadd(__global float* a, __global float* b, __global float* c, int n)
+{
+    int iGID = get_global_id(0);
+    if (iGID < n)
+    {
+        c[iGID] = a[iGID] + b[iGID];
+    }
+}
+```
+
+In both GPU implementations, the `kernel` keyword was added. In MSL, this indicates that the function is:
 - A public GPU function. In an app, public functions are the only ones that can be called from the app (CPU side). Furthermore, other shader functions cannot call public functions.
 - A compute function (also known as a compute kernel), which performs a parallel calculation using a grid of threads.
 
-We can also see that the function parameters are decorated with the device address space qualifier, which indicates that the pointers refer to memory located on the GPU device. Finally, the index parameter is decorated with the thread_position_in_grid attribute, which provides each thread with its unique index within the grid of threads. The GPU automatically calculates this index based on the thread's position in the grid and calls the kernel function for each thread.
+We can also see that the function parameters in MSL are decorated with the `device` address space qualifier, which indicates that the pointers refer to memory located on the GPU device. Finally, the index parameter is decorated with the `thread_position_in_grid` attribute, which provides each thread with its unique index within the grid of threads. The GPU automatically calculates this index based on the thread's position in the grid and calls the kernel function for each thread.
 
 In conclusion, it seems that Metal is very similar to OpenCL when comparing the syntax of the two code snippets. Without looking deeper into the OpenCL specification, I would assume that the `__global` qualifier in OpenCL is equivalent to the `device` qualifier in Metal, and that the `get_global_id(0)` function in OpenCL is equivalent to the `thread_position_in_grid` attribute in Metal. Why reinvent the wheel? :)
 
