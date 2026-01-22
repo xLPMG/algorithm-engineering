@@ -6,7 +6,7 @@
 
 ### Slide 11
 
-The first slide I would like to talk about is slide 11 "Memory-Mapped Files to Abstract IO Away". The slide shows a code snippet that demonstrates how to use memory-mapped files in C++ on Linux. Before going into the code, I'd first like to recap what memory-mapped files are. Memory-mapped files allow applications to access files on disk as if they were part of the virtual memory. Essentially (this is a translated quote from the lecture), “a file is opened and interpreted as a single large C/C++ array.” This can lead to performance improvements because it reduces the number of system calls required for file I/O operations. Instead of reading and writing data through traditional file I/O functions, applications can directly read from and write to memory.
+The first slide I would like to talk about is slide 11 "Memory-Mapped Files to Abstract IO Away". The slide shows a code snippet that demonstrates how to use memory-mapped files in C++ on Linux. Before going into the code, I'd first like to recap what memory-mapped files are: Memory-mapped files allow applications to access files on disk as if they were part of the virtual memory. Essentially (this is a translated quote from the lecture), “a file is opened and interpreted as a single large C/C++ array.” This can lead to performance improvements because it reduces the number of system calls required for file I/O operations. Instead of reading and writing data through traditional file I/O functions, applications can directly read from and write to memory.
 
 The code snippet describes a procedure of opening a 1GB random data file, inverting all bytes, and writing the result back to disk. To create a memory-mapping, the code uses the `mmap64` system call, which maps a file into the process's address space and returns a pointer to the start of the mapped region. The `mmap64` function takes several parameters, including the desired memory address (set to `nullptr` to let the system choose), the length of the mapping (in bytes), protection flags (read and write), mapping flags (shared mapping), file descriptor, and offset (0 for the start of the file). In this example, the input file is mapped with `PROT_READ`, meaning it is read-only, and `MAP_SHARED`, which allows changes to be visible to other processes if the mapping were writable.
 Next, the code opens an output file using `open64` with read-write access and `-rw-rw-r--` permissions. It then uses `fallocate64` to allocate enough space for the output file to match the size of the input file. After that, `mmap64` is called again to create a memory-mapping for the output file but this time using `PROT_WRITE | PROT_READ`. The code then iterates through each byte of the input mapping, inverts it by subtracting it from `255`, and writes the result to the output mapping.  From the developer's perspective, this process is the same as editing two arrays in memory, without having to explicitly manage low-level file I/O operations. Finally, the input mapping is unmapped using `munmap`, and the output mapping is synchronized to disk using `msync` before being unmapped as well. The `MS_ASYNC` flag indicates that the synchronization may be performed asynchronously.
@@ -18,7 +18,7 @@ Note: The code snippet uses the 64-bit versions of the functions (`mmap64`, `ope
 The second slide for which I did further research is slide 13 "General-Purpose Computing on Graphics Processing Units". This slide introduces a few frameworks for GPU programming, such as OpenCL, CUDA, Metal, OpenACC and SYCL. Because I use a Macbook, I decided to look more into Metal, which is Apple's framework for GPU programming. Metal provides low-level access to the GPU, allowing developers to write highly optimized code for graphics rendering and general-purpose computing tasks. When writing code for Metal, developers can choose between `metal-cpp`, which is a C++ API, or the original `Metal Shading Language (MSL)`, which is a variant of C++ designed for GPU programming. Fortunately, Apple provides a lot of documentation and sample code for Metal on their developer website. Since the slide shows an OpenCL example of adding two vectors on the GPU, I looked for a similar example in Metal:
 
 
-First, lets define the function in simple C:
+First, lets define the function from the lecture in simple C as a reference:
 
 ```c
 void vadd(const float* a, const float* b, float* c, int n)
@@ -64,3 +64,42 @@ In conclusion, it seems that Metal is very similar to OpenCL when comparing the 
 Sources
 - https://developer.apple.com/documentation/metal/
 - https://developer.apple.com/documentation/metal/performing-calculations-on-a-gpu
+
+### Slide 17-18
+
+Lastly, I researched more about the "Message Passing Interface" (MPI). To elaborate on the slide content, MPI is a standardized message-passing system designed to facilitate communication and data exchange between different processes running on multiple computing nodes in a cluster or supercomputer. It should be noted that MPI is not a direct implementation, but rather a specification that defines a set of functions and protocols for message passing. Various implementations of MPI exist, such as MPICH and OpenMPI, which provide libraries that developers can use to build parallel applications that adhere to the MPI standard.
+
+Slide 18 already shows the basic method calls that every MPI program must use: `MPI::Init` and `MPI::Finalize`. Furthermore, the slide shows how to get the size of the current world (number of processes) and the rank of the current process. The rank is a unique identifier assigned to each process in the MPI world, ranging from `0` to `size-1`. But what else can we do with MPI?
+
+In order to communicate between processes, MPI provides several methods to send and receive messages. The most basic methods are `MPI::Send` and `MPI::Recv`, which allow a process to send a message to another process and receive a message from another process, respectively. These methods require the following parameters:
+
+```
+MPI_Send(
+  const void *buf,          // Pointer to Data
+  int count,                // Count of Data Items To Send
+  MPI_Datatype datatype,    // Data Type (e.g. MPI_INT)
+  int receiver_rank,        // Receiver's Rank
+  int tag,                  // Message Tag
+  MPI_Comm comm             // Communicator
+);
+```
+
+and
+
+```
+MPI_Recv(
+  const void *buf,          // Pointer to Data
+  int count,                // Count of Data Items Expected To Receive
+  MPI_Datatype datatype,    // Data Type (e.g. MPI_INT)
+  int sender_rank,          // Sender's Rank
+  int tag,                  // Message Tag
+  MPI_Comm comm,            // Communicator
+  &status                   // Status Variable
+);
+```
+
+While these methods can be used to transfer data between processes, they are blocking calls, meaning that the sending process will wait until the message is received, and the receiving process will wait until a message is available. To avoid blocking, MPI also provides non-blocking methods such as `MPI_Isend` and `MPI_Irecv`, which allow processes to continue executing while waiting for messages to be sent or received. The parameters for these methods are mostly the same as for `MPI_Send` and `MPI_Recv`, but instead of a status variable, they return an `MPI_Request` request handle that can be used to check the status of the operation. This request handle can also be used with the `MPI_Wait` method to block until the operation is complete.
+
+If there are multiple non-blocking operations in progress, the `MPI_Waitall` method can be used to wait for all of them to complete. This method takes an array of request handles and blocks until all operations associated with those requests are finished. If we don't want to block, we can use the `MPI_Test` method to check if a specific operation has completed without blocking. This method takes a request handle and returns a flag indicating whether the operation is complete. We can also use `MPI_Barrier` to construct a barrier in the code which needs to be reached by all processes in the communicator before any of them can proceed further. This is useful for synchronizing processes at specific points in the program.
+
+Lastly, I want to mention that MPI also provides collective communication methods that involve all processes in a communicator. Examples of collective operations include `MPI_Bcast` for broadcasting data from one process to all others, `MPI_Reduce` for performing a reduction operation (e.g., sum, max) across all processes, and `MPI_Scatter` and `MPI_Gather` for distributing and collecting data among processes. There is also `MPI_Allreduce`, which combines the functionality of `MPI_Reduce` and `MPI_Bcast` by performing a reduction operation and then broadcasting the result to all processes.
