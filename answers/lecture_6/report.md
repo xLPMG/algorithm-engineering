@@ -65,7 +65,7 @@ Unit stride memory access means accessing consecutive memory locations without s
 
 A Structure of Arrays (SoA) is preferred when performing operations that involve a single field across many records. This can be explained with the following example:
 - Consider a structure `a` representing a 3D point with fields `x`, `y`, and `z`.
-- If we have an array of such structures and we want to perform operations on all `x` coordinates, accessing them in a SoA layout (i.e., separate arrays for `x`, `y`, and `z`) allows for better memory locality and vectorization.
+- If we have an array of such structures, and we want to perform operations on all `x` coordinates, accessing them in a SoA layout (i.e., separate arrays for `x`, `y`, and `z`) allows for better memory locality and vectorization.
     - This is because all `x` values are stored contiguously in memory: `a.x[0], a.x[1], a.x[2], ...`
     - Access to different values of a field can be done with unit stride, which is (as described in Task 3) beneficial for performance.
 - If the Array of Structures (AoS) layout was used instead, accessing all `x` values would involve jumping through memory locations, leading to poor cache performance and hindering vectorization opportunities.

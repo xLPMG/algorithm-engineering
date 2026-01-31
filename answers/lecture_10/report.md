@@ -32,8 +32,8 @@ I saw a commit "minor optimizations" in the git history, tried to run the code a
 1. manually collapse nested arrays: `array[i][j]` -> `array[i * j]` (and then access it with the calculated index)
 2. iterate through loops in reverse order: `for (i = 0; i < n; i++)` -> `for (i = n-1; i >= 0; i--)`
 
-In both cases, it might have looked like it could improve performance, but in reality, it just made the code harder to read and maintain, and even resulted in worse 
-performance. If we had used a profiler from the beginning, we would have identified the actual bottlenecks in our code and focused our optimization efforts there, rather than wasting time on premature optimizations that didn't result in significant benefits.
+In both cases, it might have looked like it could improve performance, but in reality, it just made the code harder to read and maintain, and even resulted in worse performance. 
+If we had used a profiler from the beginning, we would have identified the actual bottlenecks in our code and focused our optimization efforts there, rather than wasting time on premature optimizations that didn't result in significant benefits.
 
 ## Task 2
 

@@ -2,7 +2,7 @@
 
 ## Task 1
 
-**Read Chapter 3 titled Programming Multi-core and Shared Memory Multiprocessors Using OpenMP (pp. 47–78) in Introduction to Parallel Computing (Trobec et al., 2018)**
+**Read Chapter 3 titled** _Programming Multi-core and Shared Memory Multiprocessors Using OpenMP (pp. 47–78)_ **in** _Introduction to Parallel Computing (Trobec et al., 2018)_
 
 ### 1. When run with one thread per logical core, threads from Listing 3.1 display their numbers randomly, while those from Listing 3.2 show them in the same order. Explain why.
 
